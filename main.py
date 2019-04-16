@@ -49,7 +49,8 @@ def train(dataloader, GAB, GBA, disA, disB):
       # label
       valid = Variable(torch.tensor(np.ones((real_A.size(0), *disA.output_shape))), requires_grad=False)
       fake = Variable(torch.tensor(np.ones((real_A.size(0), *disA.output_shape))), requires_grad=False)
-
+      valid = valid.type(torch.FloatTensor)
+      fake = valid.type(torch.FloatTensor)
       optimG.zero_grad()
       # identity loss
       loss_id_A = criterion_identity(GBA(real_A), real_A)
@@ -105,8 +106,8 @@ def train(dataloader, GAB, GBA, disA, disB):
 if __name__ == "__main__":
   trainset = ImageDataset(data_root, transforms_, 'train')
   trainloader = DataLoader(trainset, batch_size=batch_size)
-  GAB = Generator(3, 3, 9)
-  GBA = Generator(3, 3, 9)
+  GAB = Generator(3, 3, 3)
+  GBA = Generator(3, 3, 3)
   D_A = Discriminator((3, 256, 256))
   D_B = Discriminator((3, 256, 256))
   result = train(trainloader, GAB, GBA, D_A, D_B)

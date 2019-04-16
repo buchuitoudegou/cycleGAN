@@ -21,7 +21,7 @@ class ResNet(nn.Module):
 
 
 class Generator(nn.Module):
-  def __init__(self, in_channel=3, out_channel=3, res_blocks=9):
+  def __init__(self, in_channel=3, out_channel=3, res_blocks=3):
     super(Generator, self).__init__()
     model = [
       nn.ReflectionPad2d(3),
