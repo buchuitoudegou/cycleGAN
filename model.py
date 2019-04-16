@@ -21,7 +21,7 @@ class ResNet(nn.Module):
 
 
 class Generator(nn.Module):
-  def __init__(self, in_channel=3, out_channel=3, res_blocks=3):
+  def __init__(self, in_channel=3, out_channel=3, res_blocks=0):
     super(Generator, self).__init__()
     model = [
       nn.ReflectionPad2d(3),
@@ -42,7 +42,7 @@ class Generator(nn.Module):
     for _ in range(res_blocks):
       model += [ResNet(in_feature)]
     out_feature = in_feature // 2
-    for _ in range(2):
+    for _ in range(1):
       model += [
         nn.ConvTranspose2d(in_feature, out_feature, 3, stride=2, padding=1, output_padding=1),
         nn.InstanceNorm2d(out_feature),

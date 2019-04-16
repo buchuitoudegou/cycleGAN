@@ -106,8 +106,8 @@ def train(dataloader, GAB, GBA, disA, disB):
 if __name__ == "__main__":
   trainset = ImageDataset(data_root, transforms_, 'train')
   trainloader = DataLoader(trainset, batch_size=batch_size)
-  GAB = Generator(3, 3, 3)
-  GBA = Generator(3, 3, 3)
+  GAB = Generator(3, 3, 1)
+  GBA = Generator(3, 3, 1)
   D_A = Discriminator((3, 256, 256))
   D_B = Discriminator((3, 256, 256))
   result = train(trainloader, GAB, GBA, D_A, D_B)
