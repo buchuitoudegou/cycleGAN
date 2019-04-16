@@ -8,6 +8,7 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 from torch.autograd import Variable
+from utils import ReplayBuffer
 
 def show_running_loss(running_loss, idx):
 	x = np.array([i for i in range(len(running_loss))])
@@ -27,6 +28,8 @@ transforms_ = [
 ]
 
 def train(dataloader, GAB, GBA, disA, disB):
+  fake_A_buffer = ReplayBuffer()
+  fake_B_buffer = ReplayBuffer()
   criterion_GAN = torch.nn.MSELoss()
   criterion_cycle = torch.nn.L1Loss()
   criterion_identity = torch.nn.L1Loss()  
@@ -78,7 +81,9 @@ def train(dataloader, GAB, GBA, disA, disB):
       optimDB.zero_grad()
       #disB loss
       loss_real = criterion_GAN(disB(real_B), valid)
-      loss_fake = criterion_GAN(disB(fake_B), fake)
+      # loss_fake = criterion_GAN(disB(fake_B), fake)
+      fake_B_ = fake_B_buffer.push_and_pop(fake_B)
+      loss_fake = criterion_GAN(disB(fake_B_.detach()), fake)
       loss_D_B = (loss_real + loss_fake) / 2
       loss_D_B.backward()
       optimDB.step()
@@ -86,7 +91,8 @@ def train(dataloader, GAB, GBA, disA, disB):
       optimDA.zero_grad()
       # disA loss
       loss_real = criterion_GAN(disA(real_A), valid)
-      loss_fake = criterion_GAN(disA(fake_A), fake)
+      fake_A_ = fake_A_buffer.push_and_pop(fake_A)
+      loss_fake = criterion_GAN(disA(fake_A_.detach()), fake)
       loss_D_A = (loss_real + loss_fake) / 2
       loss_D_A.backward()
       optimDA.step()
