@@ -42,7 +42,7 @@ class Generator(nn.Module):
     for _ in range(res_blocks):
       model += [ResNet(in_feature)]
     out_feature = in_feature // 2
-    for _ in range(1):
+    for _ in range(2):
       model += [
         nn.ConvTranspose2d(in_feature, out_feature, 3, stride=2, padding=1, output_padding=1),
         nn.InstanceNorm2d(out_feature),
