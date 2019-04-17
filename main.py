@@ -99,6 +99,7 @@ def train(dataloader, GAB, GBA, disA, disB):
 
       tempd += ((loss_D_A + loss_D_B) / 2).item()
       it += 1
+      print(it, tempd)
     gloss.append(tempg / it)
     dloss.append(tempd / it)
     print('[%3d/%3d]: dloss: %.4f, gloss: %.4f' % (epoch, epoches, dloss[-1], gloss[-1]))
@@ -112,8 +113,8 @@ def train(dataloader, GAB, GBA, disA, disB):
 if __name__ == "__main__":
   trainset = ImageDataset(data_root, transforms_, 'train')
   trainloader = DataLoader(trainset, batch_size=batch_size)
-  GAB = Generator(3, 3, 1)
-  GBA = Generator(3, 3, 1)
+  GAB = Generator(3, 3, 3)
+  GBA = Generator(3, 3, 3)
   D_A = Discriminator((3, 256, 256))
   D_B = Discriminator((3, 256, 256))
   result = train(trainloader, GAB, GBA, D_A, D_B)

@@ -52,7 +52,7 @@ class Generator(nn.Module):
       out_feature = in_feature // 2
     model += [
       nn.ReflectionPad2d(3),
-      nn.Conv2d(64, out_channel, 7),
+      nn.Conv2d(in_feature, out_channel, 7),
       nn.Tanh()
     ]
     self.model = nn.Sequential(*model)
