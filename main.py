@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 from torch.autograd import Variable
 from utils import ReplayBuffer
 
+cuda = torch.cuda.is_available()
+Tensor = torch.cuda.FloatTensor if cuda else torch.Tensor
+
 def show_running_loss(running_loss, idx):
 	x = np.array([i for i in range(len(running_loss))])
 	y = np.array(running_loss)
@@ -32,7 +35,11 @@ def train(dataloader, GAB, GBA, disA, disB):
   fake_B_buffer = ReplayBuffer()
   criterion_GAN = torch.nn.MSELoss()
   criterion_cycle = torch.nn.L1Loss()
-  criterion_identity = torch.nn.L1Loss()  
+  criterion_identity = torch.nn.L1Loss()
+  if cuda:
+    criterion_GAN = criterion_GAN.cuda()
+    criterion_cycle = criterion_cycle.cuda()
+    criterion_identity = criterion_identity.cuda() 
   optimG = torch.optim.Adam(
     itertools.chain(GAB.parameters(), GBA.parameters()), lr=lr, betas=(momentum1, momentum2)
   )
@@ -47,11 +54,11 @@ def train(dataloader, GAB, GBA, disA, disB):
     for _, data in enumerate(dataloader):
       real_A = data['A']
       real_B = data['B']
-      real_A = real_A.type(torch.FloatTensor)
-      real_B = real_B.type(torch.FloatTensor)
+      real_A = real_A.type(Tensor)
+      real_B = real_B.type(Tensor)
       # label
-      valid = Variable(torch.tensor(np.ones((real_A.size(0), *disA.output_shape))), requires_grad=False)
-      fake = Variable(torch.tensor(np.ones((real_A.size(0), *disA.output_shape))), requires_grad=False)
+      valid = Variable(Tensor(np.ones((real_A.size(0), *disA.output_shape))), requires_grad=False)
+      fake = Variable(Tensor(np.ones((real_A.size(0), *disA.output_shape))), requires_grad=False)
       valid = valid.type(torch.FloatTensor)
       fake = valid.type(torch.FloatTensor)
       optimG.zero_grad()
@@ -113,8 +120,13 @@ def train(dataloader, GAB, GBA, disA, disB):
 if __name__ == "__main__":
   trainset = ImageDataset(data_root, transforms_, 'train')
   trainloader = DataLoader(trainset, batch_size=batch_size)
-  GAB = Generator(3, 3, 3)
-  GBA = Generator(3, 3, 3)
+  GAB = Generator(3, 3, 9)
+  GBA = Generator(3, 3, 9)
   D_A = Discriminator((3, 256, 256))
   D_B = Discriminator((3, 256, 256))
+  if cuda:
+    GAB = GAB.cuda()
+    GBA = GBA.cuda()
+    D_A = D_A.cuda()
+    D_B = D_B.cuda()
   result = train(trainloader, GAB, GBA, D_A, D_B)
