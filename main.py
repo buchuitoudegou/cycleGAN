@@ -61,8 +61,9 @@ def train(dataloader, GAB, GBA, disA, disB):
       fake = Variable(Tensor(np.ones((real_A.size(0), *disA.output_shape))), requires_grad=False)
       valid = valid.type(torch.FloatTensor)
       fake = valid.type(torch.FloatTensor)
-      valid = valid.cuda()
-      fake = fake.cuda()
+      if cuda:
+        valid = valid.cuda()
+        fake = fake.cuda()
       optimG.zero_grad()
       # identity loss
       loss_id_A = criterion_identity(GBA(real_A), real_A)
