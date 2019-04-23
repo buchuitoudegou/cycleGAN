@@ -13,7 +13,7 @@ from utils import ReplayBuffer
 cuda = torch.cuda.is_available()
 Tensor = torch.cuda.FloatTensor if cuda else torch.Tensor
 
-def show_running_loss(running_loss, idx):
+def show_running_loss(running_loss, idx, prefix):
 	x = np.array([i for i in range(len(running_loss))])
 	y = np.array(running_loss)
 	plt.figure()
@@ -22,7 +22,7 @@ def show_running_loss(running_loss, idx):
 	plt.title('loss curve')
 	plt.xlabel('step')
 	plt.ylabel('loss value')
-	plt.savefig('./result/loss-{}.png'.format(idx))
+	plt.savefig('./result/{}-loss-{}.png'.format(prefix, idx))
 
 
 transforms_ = [
@@ -116,8 +116,8 @@ def train(dataloader, GAB, GBA, disA, disB):
     gloss.append(tempg / it)
     dloss.append(tempd / it)
     print('[%3d/%3d]: dloss: %.4f, gloss: %.4f' % (epoch, epoches, dloss[-1], gloss[-1]))
-  show_running_loss(gloss, 1)
-  show_running_loss(dloss, 1)
+  show_running_loss(gloss, 1, 'generator')
+  show_running_loss(dloss, 1, 'discriminator')
   return GAB, GBA, disA, disB
 
 
@@ -135,4 +135,8 @@ if __name__ == "__main__":
     GBA = GBA.cuda()
     D_A = D_A.cuda()
     D_B = D_B.cuda()
-  result = train(trainloader, GAB, GBA, D_A, D_B)
+  Gab, Gba, disa, disb = train(trainloader, GAB, GBA, D_A, D_B)
+  torch.save(Gab.state_dict(), './result/Gab.pkl')
+  torch.save(Gba.state_dict(), './result/Gba.pkl')
+  torch.save(disa.state_dict(), './result/disa.pkl')
+  torch.save(disb.state_dict(), './result/disb.pkl')
