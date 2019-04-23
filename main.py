@@ -40,6 +40,9 @@ def train(dataloader, GAB, GBA, disA, disB):
     criterion_GAN = criterion_GAN.cuda()
     criterion_cycle = criterion_cycle.cuda()
     criterion_identity = criterion_identity.cuda() 
+    print('cuda available')
+  else:
+    print('cuda disavailable')
   optimG = torch.optim.Adam(
     itertools.chain(GAB.parameters(), GBA.parameters()), lr=lr, betas=(momentum1, momentum2)
   )
