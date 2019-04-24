@@ -5,7 +5,7 @@ from torch.autograd import Variable
 import torch
 from dataset import ImageDataset
 from model import Generator, Discriminator
-from config import root, batch_size
+from config import data_root, batch_size
 import os
 
 cuda = torch.cuda.is_available()
