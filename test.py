@@ -16,9 +16,11 @@ transforms_ = [
 ]
 
 GBA = Generator(3, 3, 9)
+GAB = Generator(3, 3, 9)
 if cuda:
   print('cuda available')
   GBA = GBA.cuda()
+  GAB = GAB.cuda()
 GBA.load_state_dict(torch.load('./result/Gba.pkl'))
 GBA.eval()
 
@@ -28,8 +30,13 @@ dataloader = DataLoader(ImageDataset(data_root, transforms_, 'test'),
 batch_size=batch_size, shuffle=False)
 if not os.path.exists('outputA/'):
   os.makedirs('outputA/')
+if not os.path.exists('outputB/'):
+  os.makedirs('outputB/')
 for i, data in enumerate(dataloader):
   real_B = Variable(data['B'])
+  real_A = Variable(data['A'])
   fake_A = 0.5 * (GBA(real_B).data + 1.0)
+  fake_B = 0.5 * (GAB(real_A).data + 1.0)
   save_image(fake_A, 'outputA/%04d.png' % i)
+  save_image(fake_B, 'outputB/%04d.png' % i)
   print('finish: [%04d/%04d]' % (i, len(dataloader)))
