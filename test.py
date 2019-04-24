@@ -35,6 +35,9 @@ if not os.path.exists('outputB/'):
 for i, data in enumerate(dataloader):
   real_B = Variable(data['B'])
   real_A = Variable(data['A'])
+  if cuda:
+    real_B = real_B.cuda()
+    real_A = real_A.cuda()
   fake_A = 0.5 * (GBA(real_B).data + 1.0)
   fake_B = 0.5 * (GAB(real_A).data + 1.0)
   save_image(fake_A, 'outputA/%04d.png' % i)
