@@ -23,13 +23,13 @@ GBA.load_state_dict(torch.load('./result/Gba.pkl'))
 GBA.eval()
 
 Tensor = torch.cuda.FloatTensor if cuda else torch.Tensor
-input_B = Tensor(batch_size, 3, 256, 256)
+# input_B = Tensor(batch_size, 3, 256, 256)
 dataloader = DataLoader(ImageDataset(data_root, transforms_, 'test'), 
 batch_size=batch_size, shuffle=False)
 if not os.path.exists('outputA/'):
   os.makedirs('outputA/')
 for i, data in enumerate(dataloader):
-  real_B = Variable(input_B.copy_(data['B']))
+  real_B = Variable(data['B'])
   fake_A = 0.5 * (GBA(real_B).data + 1.0)
   save_image(fake_A, 'outputA/%04d.png' % i)
   print('finish: [%04d/%04d]' % (i, len(dataloader)))
