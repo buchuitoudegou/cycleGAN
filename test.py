@@ -22,9 +22,9 @@ if cuda:
 GBA.load_state_dict(torch.load('./result/Gba.pkl'))
 GBA.eval()
 
-Tensor = torch.cuda.FloatTnesor if cuda else torch.Tensor
+Tensor = torch.cuda.FloatTensor if cuda else torch.Tensor
 input_B = Tensor(batch_size, 3, 256, 256)
-dataloader = DataLoader(ImageDataset(root, transforms_, 'test'), 
+dataloader = DataLoader(ImageDataset(data_root, transforms_, 'test'), 
 batch_size=batch_size, shuffle=False)
 if not os.path.exists('outputA/'):
   os.makedirs('outputA/')
