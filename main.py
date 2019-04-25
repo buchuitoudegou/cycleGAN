@@ -52,10 +52,10 @@ def train(dataloader, GAB, GBA, disA, disB):
     optimG, lr_lambda=LambdaLR(epoches, 0, 50).step
   )
   lr_scheduler_D_A = torch.optim.lr_scheduler.LambdaLR(
-    optimDA, lr_lambda=LambdaLR(epochs, 0, 50).step
+    optimDA, lr_lambda=LambdaLR(epoches, 0, 50).step
   )
   lr_scheduler_D_B = torch.optim.lr_scheduler.LambdaLR(
-    optimDB, lr_lambda=LambdaLR(epochs, 0, 50).step
+    optimDB, lr_lambda=LambdaLR(epoches, 0, 50).step
   )
   gloss = []
   dloss = []
@@ -123,7 +123,7 @@ def train(dataloader, GAB, GBA, disA, disB):
 
       tempd += ((loss_D_A + loss_D_B) / 2).item()
       it += 1
-      print(it, tempd, tempg, epoch)
+      #print(it, tempd, tempg, epoch)
     gloss.append(tempg / it)
     dloss.append(tempd / it)
     print('[%3d/%3d]: dloss: %.4f, gloss: %.4f' % (epoch, epoches, dloss[-1], gloss[-1]))
