@@ -4,6 +4,6 @@ batch_size = 4
 lr = 0.0002
 momentum1 = 0.5
 momentum2 = 0.999
-epoches = 20
+epoches = 30
 cyc = 10.0
 lid = 5.0

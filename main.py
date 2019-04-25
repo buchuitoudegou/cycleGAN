@@ -112,7 +112,7 @@ def train(dataloader, GAB, GBA, disA, disB):
 
       tempd += ((loss_D_A + loss_D_B) / 2).item()
       it += 1
-      print(it, tempd)
+      print(it, tempd, tempg, epoch)
     gloss.append(tempg / it)
     dloss.append(tempd / it)
     print('[%3d/%3d]: dloss: %.4f, gloss: %.4f' % (epoch, epoches, dloss[-1], gloss[-1]))
