@@ -70,7 +70,7 @@ def train(dataloader, GAB, GBA, disA, disB):
       real_B = real_B.type(Tensor)
       # label
       valid = Variable(Tensor(np.ones((real_A.size(0), *disA.output_shape))), requires_grad=False)
-      fake = Variable(Tensor(np.ones((real_A.size(0), *disA.output_shape))), requires_grad=False)
+      fake = Variable(Tensor(np.zeros((real_A.size(0), *disA.output_shape))), requires_grad=False)
       valid = valid.type(torch.FloatTensor)
       fake = valid.type(torch.FloatTensor)
       if cuda:
