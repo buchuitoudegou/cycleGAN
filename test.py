@@ -23,7 +23,7 @@ if cuda:
   GAB = GAB.cuda()
 GBA.load_state_dict(torch.load('./result/Gba.pkl'))
 GBA.eval()
-GAB.load_state.dict(torch.load('./result/Gab.pkl'))
+GAB.load_state_dict(torch.load('./result/Gab.pkl'))
 GAB.eval()
 Tensor = torch.cuda.FloatTensor if cuda else torch.Tensor
 # input_B = Tensor(batch_size, 3, 256, 256)
